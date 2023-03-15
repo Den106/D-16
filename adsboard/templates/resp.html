@@ -1,0 +1,42 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<br>
+<br>
+<h4>{{ resp.buyer }} response to {{ resp.advert }}: </h4>
+<br>
+<h5>{{ resp.text_resp }}</h5>
+<br>
+<br>
+<h3>Status:</h3>
+<h3>
+{% if resp.status_delete %}
+    <td><span style="color: #ff0000;">Deleted</span></td>
+{% else %}
+    {% if resp.status_accept %}
+        <td><span style="color: #00ff00;">Accepted</span></td>
+    {% else %}
+        <td><span style="color: #ff9900;">In waiting</span></td>
+    {% endif %}
+{% endif %}
+</h3>
+<h4>Actions:</h4>
+<h4>
+{% if resp.status_delete == False %}
+
+    {% if request.user == resp.advert.author %}
+        {% if resp.status_accept == False %}
+        <td><a href="{{resp.get_absolute_url}}/accept"><span style="color: #99cc00;">Accept</span></a>
+        <a href="{{resp.get_absolute_url}}/delete"><span style="color: #ff0000;">Delete</span></a></td>
+        {% endif %}
+
+    {% endif %}
+    {% if request.user == resp.buyer %}
+        {% if resp.status_accept == False %}
+            <a href="{{resp.get_absolute_url}}/delete"><span style="color: #ff0000;">Delete</span></a></td>
+        {% endif %}
+    {% endif %}
+{% endif %}
+</h4>
+
+{% endblock content %}
